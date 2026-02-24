@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>FinPlay Bharat Analysis Engine</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    html, body { height: 100%; }
+    #messages pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+
+<!-- Loader -->
+<div id="loading" class="flex items-center justify-center min-h-screen text-xl font-semibold">
+  Loading App...
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden min-h-screen flex">
+
+  <!-- Sidebar -->
+  <aside id="sidebar"
+    class="fixed md:static z-30 inset-y-0 left-0 w-72 bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transform -translate-x-full md:translate-x-0 transition-transform duration-200 flex flex-col">
+
+    <div class="p-4 flex justify-between items-center border-b dark:border-gray-800">
+      <h1 class="font-bold">FinPlay Bharat</h1>
+      <button id="closeSidebar" class="md:hidden">✕</button>
+    </div>
+
+    <button id="newChatBtn"
+      class="m-3 p-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+      + New Chat
+    </button>
+
+    <div id="chatList" class="flex-1 overflow-y-auto px-2 pb-4"></div>
+
+    <div class="p-3 border-t dark:border-gray-800 space-y-2">
+      <button id="settingsBtn" class="w-full text-left">⚙ Settings</button>
+      <button id="darkToggle" class="w-full text-left">🌙 Toggle Dark</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 flex flex-col min-h-screen">
+
+    <!-- Top bar -->
+    <div class="flex items-center justify-between p-3 border-b dark:border-gray-800">
+      <button id="openSidebar" class="md:hidden">☰</button>
+      <div id="chatTitle" class="font-semibold">New Chat</div>
+      <div></div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+
+    <!-- Input -->
+    <div class="sticky bottom-0 bg-white dark:bg-gray-950 border-t dark:border-gray-800 p-3">
+      <div class="flex gap-2">
+        <textarea id="userInput"
+          rows="1"
+          placeholder="Ask anything..."
+          class="flex-1 resize-none rounded-lg border dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-3 focus:outline-none"></textarea>
+        <button id="sendBtn"
+          class="bg-blue-600 text-white px-4 rounded-lg hover:bg-blue-700">
+          Send
+        </button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="settingsModal"
+  class="hidden fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-gray-900 w-full max-w-md rounded-lg p-5 space-y-4">
+    <h2 class="font-bold text-lg">Settings</h2>
+
+    <input id="apiKeyInput" type="password"
+      placeholder="OpenRouter API Key"
+      class="w-full p-2 border rounded dark:bg-gray-800" />
+
+    <input id="modelInput" type="text"
+      placeholder="Model (default: anthropic/claude-3.5-sonnet)"
+      class="w-full p-2 border rounded dark:bg-gray-800" />
+
+    <textarea id="systemPromptInput"
+      placeholder="System Prompt"
+      class="w-full p-2 border rounded dark:bg-gray-800"></textarea>
+
+    <div class="flex justify-end gap-2">
+      <button id="closeSettings">Cancel</button>
+      <button id="saveSettings"
+        class="bg-blue-600 text-white px-4 py-2 rounded">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT (MUST BE LAST) -->
+<script>
+(function(){
+
+/* =========================
+   STATE
+========================= */
+let state = {
+  apiKey: localStorage.getItem("apiKey") || "",
+  model: localStorage.getItem("model") || "anthropic/claude-3.5-sonnet",
+  chats: JSON.parse(localStorage.getItem("chats") || "[]"),
+  activeChatId: localStorage.getItem("activeChatId") || null
+};
+
+/* =========================
+   INIT
+========================= */
+const loading = document.getElementById("loading");
+const app = document.getElementById("app");
+
+function init(){
+  if(localStorage.getItem("darkMode")==="true"){
+    document.documentElement.classList.add("dark");
+  }
+
+  if(state.chats.length === 0){
+    createNewChat();
+  }
+
+  renderChatList();
+  renderActiveChat();
+  loading.style.display = "none";
+  app.classList.remove("hidden");
+}
+
+setTimeout(init, 0);
+
+/* =========================
+   CHAT MANAGEMENT
+========================= */
+function createNewChat(){
+  const id = Date.now().toString();
+  const chat = { id, title:"New Chat", messages:[], systemPrompt:"" };
+  state.chats.unshift(chat);
+  state.activeChatId = id;
+  saveState();
+}
+
+function saveState(){
+  localStorage.setItem("apiKey", state.apiKey);
+  localStorage.setItem("model", state.model);
+  localStorage.setItem("chats", JSON.stringify(state.chats));
+  localStorage.setItem("activeChatId", state.activeChatId);
+}
+
+function getActiveChat(){
+  return state.chats.find(c=>c.id===state.activeChatId);
+}
+
+function renderChatList(){
+  const list = document.getElementById("chatList");
+  list.innerHTML="";
+  state.chats.forEach(chat=>{
+    const div=document.createElement("div");
+    div.className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer";
+    div.textContent=chat.title;
+    div.onclick=()=>{ state.activeChatId=chat.id; saveState(); renderActiveChat(); };
+    list.appendChild(div);
+  });
+}
+
+function renderActiveChat(){
+  const chat=getActiveChat();
+  if(!chat) return;
+  document.getElementById("chatTitle").textContent=chat.title;
+  const container=document.getElementById("messages");
+  container.innerHTML="";
+  chat.messages.forEach(m=>renderMessage(m.role,m.content));
+}
+
+/* =========================
+   MESSAGE RENDER
+========================= */
+function renderMessage(role,content,stream=false){
+  const container=document.getElementById("messages");
+  const div=document.createElement("div");
+  div.className= role==="user" ? "text-right" : "text-left";
+  const bubble=document.createElement("div");
+  bubble.className="inline-block p-3 rounded-lg max-w-xl " +
+    (role==="user" ?
+      "bg-blue-600 text-white" :
+      "bg-gray-200 dark:bg-gray-800");
+  if(stream){
+    bubble.textContent=content;
+  } else {
+    bubble.innerHTML=marked.parse(content);
+  }
+  div.appendChild(bubble);
+  container.appendChild(div);
+  container.scrollTop=container.scrollHeight;
+  return bubble;
+}
+
+/* =========================
+   SEND MESSAGE + STREAM
+========================= */
+async function sendMessage(){
+  const input=document.getElementById("userInput");
+  const text=input.value.trim();
+  if(!text) return;
+  if(!state.apiKey){ alert("Set API key in settings"); return; }
+
+  const chat=getActiveChat();
+  chat.messages.push({role:"user",content:text});
+  renderMessage("user",text);
+  input.value="";
+  saveState();
+
+  const aiBubble=renderMessage("assistant","",true);
+
+  try{
+    const response=await fetch("https://openrouter.ai/api/v1/chat/completions",{
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer "+state.apiKey,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        model:state.model,
+        stream:true,
+        messages:[
+          ...(chat.systemPrompt?[{role:"system",content:chat.systemPrompt}]:[]),
+          ...chat.messages
+        ]
+      })
+    });
+
+    const reader=response.body.getReader();
+    const decoder=new TextDecoder();
+    let fullText="";
+
+    while(true){
+      const {done,value}=await reader.read();
+      if(done) break;
+      const chunk=decoder.decode(value);
+      const lines=chunk.split("\n");
+      lines.forEach(line=>{
+        if(line.startsWith("data:")){
+          const json=line.replace("data: ","").trim();
+          if(json==="[DONE]") return;
+          try{
+            const data=JSON.parse(json);
+            const token=data.choices?.[0]?.delta?.content;
+            if(token){
+              fullText+=token;
+              aiBubble.textContent=fullText;
+              document.getElementById("messages").scrollTop=
+                document.getElementById("messages").scrollHeight;
+            }
+          }catch(e){}
+        }
+      });
+    }
+
+    aiBubble.innerHTML=marked.parse(fullText);
+    chat.messages.push({role:"assistant",content:fullText});
+    saveState();
+
+  }catch(err){
+    aiBubble.textContent="Error: "+err.message;
+  }
+}
+
+/* =========================
+   EVENTS
+========================= */
+document.getElementById("sendBtn").onclick=sendMessage;
+document.getElementById("userInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter" && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+document.getElementById("newChatBtn").onclick=()=>{
+  createNewChat();
+  renderChatList();
+  renderActiveChat();
+};
+
+document.getElementById("darkToggle").onclick=()=>{
+  document.documentElement.classList.toggle("dark");
+  localStorage.setItem("darkMode",
+    document.documentElement.classList.contains("dark"));
+};
+
+document.getElementById("openSidebar").onclick=()=>{
+  document.getElementById("sidebar").classList.remove("-translate-x-full");
+};
+
+document.getElementById("closeSidebar").onclick=()=>{
+  document.getElementById("sidebar").classList.add("-translate-x-full");
+};
+
+/* SETTINGS */
+document.getElementById("settingsBtn").onclick=()=>{
+  document.getElementById("settingsModal").classList.remove("hidden");
+  document.getElementById("apiKeyInput").value=state.apiKey;
+  document.getElementById("modelInput").value=state.model;
+};
+
+document.getElementById("closeSettings").onclick=()=>{
+  document.getElementById("settingsModal").classList.add("hidden");
+};
+
+document.getElementById("saveSettings").onclick=()=>{
+  state.apiKey=document.getElementById("apiKeyInput").value.trim();
+  state.model=document.getElementById("modelInput").value.trim() ||
+    "anthropic/claude-3.5-sonnet";
+  const chat=getActiveChat();
+  if(chat){
+    chat.systemPrompt=document.getElementById("systemPromptInput").value;
+  }
+  saveState();
+  document.getElementById("settingsModal").classList.add("hidden");
+};
+
+})();
+</script>
+
+</body>
+</html>
