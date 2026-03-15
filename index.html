@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinPlay Bharat Analysis Engine</title>
     
-    <!-- Tailwind POSTCSS -->
-    @import "tailwindcss";
+    <!-- Tailwind CSS CDN - CORRECT WAY -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Marked.js for Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -401,7 +401,6 @@
             font-family: inherit;
         }
     </style>
-  <script src="https://your-cdn.com/library.js"></script>
 </head>
 <body class="min-h-screen flex flex-col">
     <!-- Loading Fallback -->
@@ -940,7 +939,7 @@
             store.saveSetting('model', DOM.modelInput.value);
             store.saveSetting('systemPrompt', DOM.systemPromptInput.value);
             closeSettings();
-            showError('Settings saved successfully!'); // Positive feedback
+            showError('Settings saved successfully!');
             setTimeout(clearError, 3000);
         });
 
