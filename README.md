@@ -1,321 +1,701 @@
-<div align="center">
+# FinPlay Bharat Analysis Engine 🚀
 
-# 🇮🇳 FinPlay Bharat Analysis Engine
+A **production-grade AI chat interface** inspired by ChatGPT/Claude, built with **zero build tools** using vanilla JavaScript, Tailwind CSS, and OpenRouter API.
 
-### *Your AI-Powered Financial Intelligence Chat Interface*
-
-<br/>
-
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Claude](https://img.shields.io/badge/Claude-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Gemini](https://img.shields.io/badge/Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)
-![ChatGPT](https://img.shields.io/badge/ChatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
-![OpenRouter](https://img.shields.io/badge/OpenRouter-6E3AFA?style=for-the-badge&logo=openai&logoColor=white)
-
-![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
-![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange?style=flat-square)
-![Single File](https://img.shields.io/badge/build-single--file-purple?style=for-the-badge)
-
-</div>
-
----
-
-## 📖 Table of Contents
-
-- [Overview](#-overview)
-- [Live Demo](#-live-demo)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [How It Works](#-how-it-works)
-- [Getting Started](#-getting-started)
-- [Configuration](#-configuration)
-- [Project Structure](#-project-structure)
-- [Architecture Decisions](#-architecture-decisions)
-- [Pros & Cons Analysis](#-pros--cons-analysis)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-
----
-
-## 🌟 Overview
-
-**FinPlay Bharat Analysis Engine** is a sleek, single-file AI chatbot interface purpose-built for financial analysis in the Indian market context. It connects to powerful LLMs via [OpenRouter](https://openrouter.ai), enabling real-time streaming conversations with full chat history management — all in one self-contained HTML file.
-
-> 💡 **No backend. No build step. No frameworks to install.** Just open the HTML file in a browser and start analyzing.
-
----
-
-## 🚀 Live Demo
-
-```
-1. Download index.html
-2. Open in any modern browser
-3. Add your OpenRouter API key in ⚙ Settings
-4. Start chatting!
-```
+> **One single `index.html` file. Copy. Paste. Run. Done.**
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
-|---|---|
-| 🤖 **AI Streaming** | Real-time token-by-token response streaming via OpenRouter API |
-| 💬 **Multi-Chat** | Create, switch, and manage unlimited chat sessions |
-| 🌙 **Dark Mode** | Full dark/light theme toggle with localStorage persistence |
-| 📱 **Responsive** | Mobile-first sidebar with smooth slide-in/out transitions |
-| ⚙️ **Configurable** | Set API key, model, and system prompt per-chat via Settings modal |
-| 📝 **Markdown** | Full markdown rendering (code blocks, tables, bold, etc.) via `marked.js` |
-| 💾 **Persistent** | All chats and settings saved to `localStorage` — survive page refresh |
-| 🔒 **Private** | Everything runs client-side — your API key never hits a third-party server |
+### Core Functionality
+- 💬 **Real-time AI Chat** - Stream responses token-by-token from OpenRouter API
+- 🔐 **Secure API Integration** - OpenRouter support with configurable API keys
+- 💾 **Chat Persistence** - All conversations saved to browser localStorage
+- 🎨 **Dark Mode** - Toggle dark/light theme with persistent preference
+
+### Advanced Features
+- 📁 **Chat Management**
+  - Create unlimited chats
+  - Rename chats on-the-fly
+  - Delete individual conversations
+  - Chat history sidebar with active indicator
+
+- ⌨️ **Smart Input**
+  - Auto-resizing textarea (grows with text)
+  - Keyboard shortcuts (Shift+Enter for multiline)
+  - Auto-focus after send
+
+- 🧠 **System Prompts**
+  - Define custom AI behavior per chat
+  - Global system prompt settings
+  - Persistent across sessions
+
+- 📱 **Mobile First**
+  - Fully responsive design
+  - Hamburger sidebar toggle
+  - Input bar always visible (no keyboard hiding)
+  - Touch-friendly buttons
+
+- 🎯 **Developer Experience**
+  - **Zero dependencies** - CDN libraries only
+  - **No build step** - Works immediately
+  - **Vanilla JavaScript** - Pure ES6+
+  - **Clean code** - Modular, well-commented
+  - **Safe by default** - DOMPurify sanitization
+
+### UX Enhancements
+- ✍️ **Typing Animation** - Letter-by-letter cursor animation
+- 📊 **Markdown Rendering** - Full markdown support with code highlighting
+- 🛡️ **Error Handling** - Defensive checks, user-friendly error messages
+- ⏳ **Loading States** - Disabled send button during streaming
+- 📍 **Auto-scroll** - Messages auto-scroll to latest
 
 ---
 
-## 🛠 Tech Stack
+## 🎯 Quick Start
+
+### Step 1: Get Your Files
+Download `index.html` from the repository or copy the code directly.
+
+### Step 2: Get OpenRouter API Key
+1. Visit [openrouter.ai](https://openrouter.ai)
+2. Sign up (free tier available)
+3. Generate API key
+4. Copy the key (format: `sk-or-v1-...`)
+
+### Step 3: Open & Configure
+```bash
+# Simply open index.html in your browser
+# No installation needed!
+
+# On Mac:
+open index.html
+
+# On Windows:
+start index.html
+
+# Or drag & drop into browser
+```
+
+### Step 4: Add Your Settings
+1. Click **⚙️ Settings** in sidebar
+2. Paste API Key in "OpenRouter API Key" field
+3. Set Model (e.g., `openai/gpt-3.5-turbo`)
+4. (Optional) Add System Prompt for custom AI behavior
+5. Click **Save Settings**
+
+### Step 5: Start Chatting! 🎉
+- Type your message in the input box
+- Press **Enter** to send (or click Send button)
+- Watch responses stream in real-time
+- Create new chats with **+ New Chat**
+
+---
+
+## 🏗️ Architecture Overview
+
+### Single File, Modular Structure
 
 ```
-┌─────────────────────────────────────────────────┐
-│             FinPlay Bharat Stack                │
-│                                                 │
-│  📄  HTML5          → Structure & Layout        │
-│  🎨  Tailwind CSS   → Utility-first Styling     │
-│  ⚡  Vanilla JS     → All Logic (IIFE pattern)  │
-│  📦  marked.js      → Markdown → HTML parsing   │
-│  🤖  OpenRouter API → LLM Gateway (Claude etc.) │
-│  💾  localStorage   → State Persistence         │
-└─────────────────────────────────────────────────┘
+index.html (1006 lines)
+├── HEAD
+│   ├── Meta tags (viewport, charset)
+│   ├── CDN libraries
+│   │   ├── Tailwind CSS
+│   │   ├── Marked.js (Markdown)
+│   │   └── DOMPurify (Security)
+│   └── Custom CSS
+│       ├── CSS Variables (theming)
+│       ├── Component styles
+│       └── Responsive breakpoints
+│
+├── BODY (HTML)
+│   ├── Loading fallback
+│   ├── Main app container
+│   ├── Sidebar (chat history)
+│   ├── Chat area (messages + input)
+│   ├── Settings modal
+│   └── Rename modal
+│
+└── SCRIPT (JavaScript)
+    ├── State Management (store object)
+    ├── DOM References (cached selectors)
+    ├── UI Rendering (render functions)
+    ├── Chat Functions (send, switch, etc)
+    ├── Event Listeners (all interactions)
+    └── Initialization (setup on load)
 ```
 
-### External CDNs Used
+### State Management
 
+```javascript
+const store = {
+  chats: {},           // { chat_id: { id, title, messages, createdAt } }
+  currentChatId: null, // Active chat ID
+  apiKey: '',          // OpenRouter API key
+  model: '',           // Selected model
+  systemPrompt: '',    // Global system prompt
+  isDarkMode: false    // Theme preference
+}
+```
+
+### Data Flow
+
+```
+User Input
+    ↓
+sendMessage() function
+    ↓
+Add user message to store
+    ↓
+Fetch from OpenRouter API (streaming)
+    ↓
+Parse SSE response (token by token)
+    ↓
+Update bubble innerHTML with markdown
+    ↓
+Save full response to store
+    ↓
+Render UI
+```
+
+---
+
+## ⚙️ Configuration
+
+### Default Settings
+
+| Setting | Default | Where to Change |
+|---------|---------|-----------------|
+| Model | `openai/gpt-3.5-turbo` | Settings modal |
+| API Key | Empty | Settings modal |
+| System Prompt | Empty | Settings modal |
+| Dark Mode | False | Theme toggle button |
+| Max textarea height | 150px | CSS line 145 |
+| Max messages per chat | Unlimited | N/A |
+
+### Change Default Values
+
+**Edit Default Model (line ~480):**
+```javascript
+model: localStorage.getItem('model') || 'openai/gpt-4-turbo'
+```
+
+**Edit App Name (line ~48):**
 ```html
-<!-- Tailwind CSS (styling) -->
-<script src="https://cdn.tailwindcss.com"></script>
+<h1 class="text-lg font-bold">Your App Name</h1>
+```
 
-<!-- Marked.js (markdown rendering) -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+**Change Primary Color (line ~25):**
+```css
+--accent-color: #ff6b6b; /* Your color instead of #10a37f */
+```
+
+**Add Custom System Prompt:**
+```javascript
+systemPrompt: localStorage.getItem('systemPrompt') || 'You are a helpful AI assistant.'
 ```
 
 ---
 
-## ⚙️ How It Works
+## 🌐 Available Models
 
-```
-User types message
-       │
-       ▼
-  sendMessage()
-       │
-       ├──► Pushes to chat.messages[]
-       │
-       ├──► POST to OpenRouter API
-       │         (stream: true)
-       │
-       ▼
-  ReadableStream reader
-       │
-       ├──► Decode SSE chunks → parse delta tokens
-       │
-       ├──► Live-update bubble (textContent)
-       │
-       └──► On [DONE] → marked.parse() → innerHTML
-                │
-                └──► saveState() → localStorage
-```
+OpenRouter supports 100+ models. Popular options:
 
-**Server-Sent Events (SSE) Streaming Flow:**
-1. `fetch()` sends the full message history to OpenRouter
-2. Response body is read as a `ReadableStream`
-3. Each chunk is decoded, split by newlines, and filtered for `data:` prefixes
-4. JSON is parsed, delta tokens extracted and appended to the bubble live
-5. On stream completion, the raw text is rendered as Markdown
+| Model | Speed | Cost | Quality |
+|-------|-------|------|---------|
+| `openai/gpt-3.5-turbo` | ⚡⚡⚡ | 💰 | ⭐⭐⭐ |
+| `openai/gpt-4` | ⚡⚡ | 💰💰💰 | ⭐⭐⭐⭐⭐ |
+| `openai/gpt-4-turbo` | ⚡⚡ | 💰💰 | ⭐⭐⭐⭐⭐ |
+| `anthropic/claude-3-sonnet` | ⚡⚡ | 💰💰 | ⭐⭐⭐⭐ |
+| `meta-llama/llama-2-70b-chat` | ⚡⚡ | 💰 | ⭐⭐⭐ |
+| `mistralai/mistral-7b-instruct` | ⚡⚡⚡ | 💰 | ⭐⭐⭐ |
+
+See full list: [OpenRouter Models](https://openrouter.ai/models)
 
 ---
 
-## 🚀 Getting Started
+## 📱 Mobile Responsiveness
 
-### Prerequisites
+### Tested On:
+- ✅ iPhone 12/13/14/15
+- ✅ Android Chrome (latest)
+- ✅ iPad (portrait & landscape)
+- ✅ Desktop (Chrome, Firefox, Safari, Edge)
 
-- A modern browser (Chrome, Firefox, Edge, Safari)
-- An [OpenRouter API Key](https://openrouter.ai/keys) (free tier available)
+### Mobile Features:
+- Hamburger menu (☰) toggles sidebar
+- Overlay backdrop closes sidebar
+- Input bar sticky at bottom
+- Messages adjust to 90% width
+- Touch-friendly button sizes
 
-### Setup — 3 Steps
+### Breakpoints:
+```css
+/* Mobile (< 768px) */
+- Sidebar: Fixed position, off-screen by default
+- Hamburger: Visible
+- Layout: Single column
+
+/* Desktop (≥ 768px) */
+- Sidebar: Always visible
+- Hamburger: Hidden
+- Layout: Sidebar + Main area
+```
+
+---
+
+## 🔒 Security
+
+### Security Features Implemented:
+
+1. **DOMPurify Integration**
+   - Sanitizes markdown output
+   - Prevents XSS attacks
+   - Removes malicious scripts
+
+2. **API Key Handling**
+   - Stored in browser localStorage (same as browser history)
+   - Sent to OpenRouter via HTTPS only
+   - Never logged or transmitted elsewhere
+   - ⚠️ For production: Use backend proxy to hide API key
+
+3. **Input Validation**
+   - Checks for empty messages
+   - Validates API key presence
+   - Error boundaries in try-catch blocks
+
+4. **Markdown Rendering**
+   - Uses marked.js library (battle-tested)
+   - HTML is sanitized before rendering
+   - No execution of arbitrary code
+
+### Security Best Practices:
+```javascript
+// ✅ Safe: Uses DOMPurify + marked.js
+bubble.innerHTML = DOMPurify.sanitize(marked.parse(content));
+
+// ❌ Unsafe: Would be vulnerable to XSS
+bubble.innerHTML = content;
+```
+
+---
+
+## 📂 File Structure
+
+```
+FinPlay-Bharat-Analysis-Engine/
+├── index.html                 # Main application file (1006 lines)
+├── README.md                  # This file
+└── (No other files needed!)
+```
+
+---
+
+## 🚀 Deployment Options
+
+### Option 1: GitHub Pages (Recommended)
 
 ```bash
-# Step 1: Download or clone
-git clone https://github.com/your-username/finplay-bharat.git
+# 1. Create GitHub repository
+# 2. Upload index.html to repo root
+# 3. Go to Settings → Pages
+# 4. Select "Deploy from branch" → main
+# 5. Access at: https://yourusername.github.io/repo-name
 
-# Step 2: Open the file
-open index.html    # macOS
-start index.html   # Windows
-xdg-open index.html # Linux
+# Free, fast, automatic HTTPS ✅
+```
 
-# Step 3: Configure
-# Click ⚙ Settings → paste your OpenRouter API Key → Save
+### Option 2: Netlify
+
+```bash
+# 1. Drag & drop index.html to netlify.com
+# 2. Or connect GitHub repo for auto-deploy
+# 3. Automatic HTTPS & CDN ✅
+```
+
+### Option 3: Vercel
+
+```bash
+# 1. Create project at vercel.com
+# 2. Upload index.html
+# 3. Auto-deployed with HTTPS ✅
+```
+
+### Option 4: Local Server
+
+```bash
+# Simple HTTP server
+python -m http.server 8000
+# Or: npx http-server
+# Access at: http://localhost:8000
+```
+
+### Option 5: Self-Hosted
+
+```bash
+# Any web server works (Apache, Nginx, etc.)
+# Just serve index.html as static file
+# Supports HTTPS with Let's Encrypt
 ```
 
 ---
 
-## 🔧 Configuration
+## 🛠️ Customization Guide
 
-Open **Settings** (⚙ icon in sidebar) to configure:
+### Change App Theme
 
-| Setting | Default | Description |
-|---|---|---|
-| `API Key` | *(empty)* | Your OpenRouter API key |
-| `Model` | `anthropic/claude-3.5-sonnet` | Any OpenRouter-supported model |
-| `System Prompt` | *(empty)* | Per-chat persona/instruction for the AI |
-
-### Supported Models (via OpenRouter)
-
+**Accent Color:**
+```css
+:root {
+    --accent-color: #10a37f;  /* Change this line */
+}
 ```
-anthropic/claude-3.5-sonnet     ← Default (recommended)
-anthropic/claude-3-haiku        ← Faster, cheaper
-openai/gpt-4o                   ← OpenAI option
-google/gemini-pro               ← Google option
-meta-llama/llama-3.1-70b        ← Open-source option
+
+**Dark Mode Colors:**
+```css
+html.dark-mode {
+    --bg-primary: #1a1a1a;    /* Change these */
+    --bg-secondary: #2a2a2a;
+}
+```
+
+### Modify UI Text
+
+**Placeholder text:**
+```html
+<textarea placeholder="Ask FinPlay Bharat anything...">
+<!-- Change "Ask FinPlay Bharat anything..." -->
+```
+
+**App name in sidebar:**
+```html
+<h1>FinPlay Bharat</h1>
+<p>Analysis Engine</p>
+```
+
+### Add Custom Models List
+
+Add a dropdown instead of text input:
+```html
+<select id="modelInput" class="settings-input">
+    <option value="openai/gpt-4">GPT-4</option>
+    <option value="openai/gpt-3.5-turbo">GPT-3.5</option>
+    <option value="anthropic/claude-3-sonnet">Claude 3</option>
+</select>
+```
+
+### Increase Input Textarea Height
+
+**Line 145 in CSS:**
+```css
+.input-field {
+    max-height: 300px;  /* Change from 150px */
+}
 ```
 
 ---
 
-## 🗂 Project Structure
+## 🐛 Troubleshooting
 
-```
-finplay-bharat/
-│
-├── index.html          ← Entire application (single file)
-│   │
-│   ├── <head>
-│   │   ├── Tailwind CDN
-│   │   └── Marked.js CDN
-│   │
-│   ├── <body>
-│   │   ├── #loading        → Initial loader overlay
-│   │   ├── #app            → Main application wrapper
-│   │   │   ├── <aside>     → Sidebar (chat list, controls)
-│   │   │   └── <main>      → Chat area (messages + input)
-│   │   └── #settingsModal  → Settings overlay
-│   │
-│   └── <script>  (IIFE)
-│       ├── STATE           → In-memory + localStorage state
-│       ├── INIT            → Boot logic
-│       ├── CHAT MGMT       → Create/switch/save chats
-│       ├── RENDER          → Message bubble rendering
-│       ├── SEND + STREAM   → API call + SSE handler
-│       └── EVENTS          → All DOM event listeners
-│
-└── README.md
+### Issue: Blank Page on Load
+
+**Solution:**
+- Check browser console (F12) for errors
+- Ensure all CDN libraries loaded (check Network tab)
+- Try hard refresh (Ctrl+Shift+R or Cmd+Shift+R)
+
+### Issue: API Key Not Saving
+
+**Solution:**
+- Check if localStorage is enabled in browser
+- Try incognito/private mode first
+- Clear browser cache and try again
+- Check if you're in an iframe (localStorage disabled)
+
+### Issue: Streaming Not Working
+
+**Solution:**
+- Verify API key is correct (copy from openrouter.ai)
+- Check if model name is valid: [openrouter.ai/models](https://openrouter.ai/models)
+- Ensure you have API credit balance
+- Check OpenRouter status page for outages
+
+### Issue: Messages Not Appearing
+
+**Solution:**
+- Check browser console for JavaScript errors
+- Verify API key and model in settings
+- Try with a shorter message first
+- Clear localStorage: `localStorage.clear()` in console
+
+### Issue: Mobile Sidebar Not Closing
+
+**Solution:**
+- Click overlay (gray area) to close
+- Swipe back on iOS
+- Refresh page if stuck
+- Try different browser
+
+### Issue: Dark Mode Not Persisting
+
+**Solution:**
+- Check if localStorage is enabled
+- Try in non-private/non-incognito mode
+- Clear cookies and try again
+
+---
+
+## 📊 Storage & Limits
+
+### localStorage Capacity
+
+| Browser | Limit | Reality |
+|---------|-------|---------|
+| Chrome | 10MB | ~10MB per origin |
+| Firefox | 10MB | ~10MB per origin |
+| Safari | 5MB | ~5MB per origin |
+| Edge | 10MB | ~10MB per origin |
+
+**For FinPlay:**
+- Average chat: ~5KB
+- 100 chats: ~500KB
+- 1000 chats: ~5MB
+- Settings: ~1KB
+
+✅ **You can store 100+ full conversations easily**
+
+### How to Clear Storage
+
+```javascript
+// In browser console (F12):
+localStorage.clear()  // Clears all data
+localStorage.removeItem('chats')  // Clears only chats
+localStorage.removeItem('apiKey')  // Clears only API key
 ```
 
 ---
 
-## 🏗 Architecture Decisions
+## 🎓 Learning Resources
 
-### ✅ Why Single-File HTML?
-- **Zero deployment complexity** — host anywhere (GitHub Pages, S3, local)
-- **No build pipeline** — no webpack, no npm, no node_modules
-- **Portability** — share as a single file via email/USB
+### Understanding the Code
 
-### ✅ Why Vanilla JS (IIFE pattern)?
-- No framework overhead
-- Full control over DOM
-- IIFE (`(function(){...})()`) prevents global namespace pollution
+**For Beginners:**
+1. Read the HTML structure (lines 230-590)
+2. Understand CSS variables (lines 18-40)
+3. Learn basic JavaScript (lines 600-650)
 
-### ✅ Why OpenRouter instead of direct Anthropic API?
-- Single API key unlocks 100+ models
-- Consistent streaming interface across providers
-- Easy model switching without code changes
+**For Intermediate:**
+1. Study state management pattern (lines 605-700)
+2. Understand event listeners (lines 913-950)
+3. Learn DOM manipulation (lines 730-750)
 
-### ✅ Why localStorage for persistence?
-- No backend/database needed
-- Instant read/write, zero latency
-- Works offline
+**For Advanced:**
+1. Study streaming response parsing (lines 822-850)
+2. Understand async/await (lines 761-865)
+3. Learn fetch API and ReadableStream
 
----
+### Suggested Improvements to Learn
 
-## ⚖️ Pros & Cons Analysis
-
-### 🟢 Strengths
-
-| Aspect | Analysis |
-|---|---|
-| **Simplicity** | Single HTML file = maximum portability and zero setup friction |
-| **Streaming UX** | SSE streaming gives a premium "typing" feel like ChatGPT |
-| **Dark Mode** | System-aware toggle improves usability across environments |
-| **Model Flexibility** | OpenRouter gateway means you're not locked into one provider |
-| **Markdown Support** | `marked.js` properly renders code, tables, and formatting |
-| **Responsiveness** | Tailwind utility classes make mobile layout clean and fast |
-
-### 🔴 Limitations & Improvement Areas
-
-| Area | Current Limitation | Suggested Fix |
-|---|---|---|
-| **API Key Security** | Stored in `localStorage` (plaintext) | Use session-only storage + warn users |
-| **Context Window** | Full message history sent every call → costs grow | Add token counting + auto-truncation |
-| **Chat Titles** | Always shows "New Chat" | Auto-generate titles from first message |
-| **No Export** | Can't export chat history | Add JSON/PDF export button |
-| **SSE Error Handling** | Silent `try/catch` on chunk parse | Add visible retry/error states |
-| **No Search** | Can't search across chat history | Add in-memory full-text search |
-| **Single File Limit** | Hard to scale or add features | Consider modular JS refactor for v2 |
-
----
-
-## 🗺 Roadmap
-
-```
-v1.0  ✅  Core chat + streaming + dark mode + localStorage
-v1.1  🔄  Auto-generate chat titles from first message
-v1.2  🔲  Export chats (JSON / Markdown)
-v1.3  🔲  Token counter + context window warning
-v2.0  🔲  PWA support (offline capability)
-v2.1  🔲  Multi-language support (Hindi, Gujarati, Tamil...)
-v2.2  🔲  Financial data integrations (NSE/BSE live prices)
-```
+1. **Add Image Upload** - Use OpenRouter vision API
+2. **Export Chat as PDF** - Use jsPDF library
+3. **Search Past Chats** - Filter by keywords
+4. **Voice Input** - Use Web Speech API
+5. **Conversation Branching** - Fork chats at any message
+6. **Model Comparison** - Run same prompt on 2 models
+7. **Rate Limiting** - Throttle API calls
+8. **Caching** - Store similar responses
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here's how:
+This is a single-file educational project. To contribute:
 
-```bash
-# 1. Fork the repo
-# 2. Create your branch
-git checkout -b feature/your-feature-name
-
-# 3. Make changes to index.html
-# 4. Test in multiple browsers
-
-# 5. Submit a PR with description of changes
-```
-
-**Please follow these conventions:**
-- Keep it single-file (unless proposing v2 architecture)
-- Tailwind-only for styling (no custom CSS unless necessary)
-- Comment new JS sections clearly
+1. Fork the repository
+2. Make improvements
+3. Test thoroughly on mobile & desktop
+4. Submit a pull request with description
+5. Include before/after screenshots if UI changes
 
 ---
 
-## 📄 License
+## 📝 License
+
+This project is **MIT Licensed** - free for personal and commercial use.
 
 ```
-MIT License — Free to use, modify, and distribute.
-See LICENSE file for details.
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software.
 ```
 
 ---
 
-<div align="center">
+## 💡 Pro Tips
 
-**Built with ❤️ for Bharat's Financial Community**
+### Tip 1: Save Your API Key Securely
+```
+✅ Use password manager to store API key
+❌ Don't share screenshots showing API key
+✅ Rotate key monthly in OpenRouter dashboard
+```
 
-*"Empowering every Indian investor with AI-grade analysis"*
+### Tip 2: Optimize for Your Use Case
+```javascript
+// For Indian market analysis:
+systemPrompt: "You are an expert in Indian finance and markets. 
+Provide analysis in English/Hindi with context for Indian audience."
+```
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
-![TailwindCSS](https://img.shields.io/badge/Tailwind-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
+### Tip 3: Bulk Import Chats
+```javascript
+// Paste in console to import from other ChatGPT exports:
+localStorage.setItem('chats', JSON.stringify(importedChats))
+```
 
-</div>
+### Tip 4: Monitor API Usage
+- Check OpenRouter dashboard for costs
+- Set spending limits
+- Use cheaper models for testing
+
+### Tip 5: Backup Your Chats
+```javascript
+// Copy & save this in text file:
+JSON.stringify(JSON.parse(localStorage.getItem('chats')), null, 2)
+```
+
+---
+
+## 🔗 Useful Links
+
+- **OpenRouter Docs**: https://openrouter.ai/docs
+- **Marked.js**: https://marked.js.org/
+- **DOMPurify**: https://github.com/cure53/DOMPurify
+- **Tailwind CSS**: https://tailwindcss.com/
+- **MDN Web Docs**: https://developer.mozilla.org/
+
+---
+
+## 📞 Support
+
+### Getting Help
+
+1. **Check Troubleshooting section** above
+2. **Read code comments** in index.html
+3. **Check browser console** (F12) for errors
+4. **Search similar issues** on GitHub
+5. **Create an issue** with error logs
+
+### Reporting Bugs
+
+When reporting issues, include:
+- ✅ Browser & version (Chrome 120, Safari 17, etc.)
+- ✅ Device type (iPhone, Android, Desktop)
+- ✅ Steps to reproduce
+- ✅ Error message from console
+- ✅ Screenshots if visual issue
+
+---
+
+## 🎉 Success Checklist
+
+After setup, verify:
+
+- [ ] index.html opens in browser
+- [ ] No blank page (wait 2-3 seconds)
+- [ ] Settings button works
+- [ ] API key saves successfully
+- [ ] Can send a message
+- [ ] Response streams in real-time
+- [ ] Dark mode toggle works
+- [ ] New chat button creates chat
+- [ ] Rename chat works
+- [ ] Delete chat works
+- [ ] Works on mobile (resize browser)
+- [ ] Messages persist after refresh
+
+✅ All checked? **You're ready to go!** 🚀
+
+---
+
+## 🌟 Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.0.0 | Mar 2026 | Initial release |
+
+---
+
+## 🙏 Credits
+
+**Built with:**
+- Vanilla JavaScript (ES6+)
+- Tailwind CSS
+- Marked.js
+- DOMPurify
+- OpenRouter API
+
+**Inspired by:**
+- ChatGPT UI
+- Claude.ai
+- Modern web standards
+
+---
+
+## 📈 Future Roadmap
+
+Potential features for future versions:
+
+- [ ] Local LLM support (Ollama)
+- [ ] Multiple API provider support
+- [ ] Voice input/output
+- [ ] Image generation integration
+- [ ] Chat export to PDF/Word
+- [ ] Conversation branching
+- [ ] Collaborative chats (shared links)
+- [ ] Plugin system
+- [ ] Custom themes marketplace
+- [ ] Analytics dashboard
+
+---
+
+## 🎯 Final Notes
+
+**Remember:**
+- This is a **demo/educational project**
+- For production, add **backend proxy** for API keys
+- Test on **your target devices** before deploying
+- Monitor **OpenRouter billing** regularly
+- **Backup important chats** locally
+- Keep **dependencies updated** (CDN libraries)
+
+**Questions?** Check the code comments - they explain everything! 💬
+
+---
+
+## 🚀 Happy Coding!
+
+```
+        _______________
+       /               \
+      |  FinPlay Bharat |
+      | Analysis Engine |
+       \_______________/
+             |||
+             vvv
+      Let's Build Something Amazing!
+```
+
+**Last Updated:** March 2026  
+**Maintained By:** FinPlay Development Team  
+**License:** MIT  
+
+---
+
+*Made with ❤️ for the Indian AI community*
