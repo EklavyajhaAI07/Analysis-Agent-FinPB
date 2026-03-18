@@ -4,8 +4,8 @@ A **production-grade AI chat interface** inspired by ChatGPT/Claude, built with 
 
 > **One single `index.html` file. Copy. Paste. Run. Done.**
 
-<p align="center"> <img src=https://i.postimg.cc/FsPpmv4Y/Fin-PB-Engine.png"" alt="FinPB Engine" /> </p>
-
+<p align="center"> <img src="https://i.postimg.cc/qMdqR6pm/Screenshot-2026-03-18-135921.png" alt="FinPB Engine" /> </p>
+My Analysis Engine Site: **https://eklavyajhaai07.github.io/Analysis-Agent-FinPB/**
 ---
 
 ## ✨ Features
