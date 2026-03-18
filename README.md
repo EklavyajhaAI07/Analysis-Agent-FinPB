@@ -6,6 +6,7 @@ A **production-grade AI chat interface** inspired by ChatGPT/Claude, built with 
 
 <p align="center"> <img src="https://i.postimg.cc/qMdqR6pm/Screenshot-2026-03-18-135921.png" alt="FinPB Engine" /> </p>
 My Analysis Engine Site: **https://eklavyajhaai07.github.io/Analysis-Agent-FinPB/**
+
 ---
 
 ## ✨ Features
